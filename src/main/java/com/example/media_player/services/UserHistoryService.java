@@ -36,7 +36,7 @@ public class UserHistoryService implements UserHistoryServiceInterface {
         }
 
         MediaDto mediaDtoResponse = restClient.get()
-                .uri(serviceInstance.getUri() + "/media/getmediabyid/" + id)
+                .uri(serviceInstance.getUri() + "/api/v1/getmediabyid/" + id)
                 .retrieve()
                 .body(MediaDto.class);
         if (mediaDtoResponse == null) {
