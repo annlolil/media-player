@@ -18,8 +18,7 @@ public class UserHistoryController {
 
     @PostMapping("/play")
     public ResponseEntity<MediaDto> playMedia(@RequestParam Long id) { //Add @authenticationprincipal jwt jwt later on...
-        MediaDto media = userHistoryService.playMedia(id);
-        return new ResponseEntity<>(media, HttpStatus.OK);
+        return new ResponseEntity<>(userHistoryService.playMedia(id), HttpStatus.OK);
     }
 
 //    @GetMapping("/mostplayed")

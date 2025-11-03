@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Comparator;
+import java.util.List;
+
 @Service
 public class UserHistoryService implements UserHistoryServiceInterface {
 
@@ -30,27 +33,47 @@ public class UserHistoryService implements UserHistoryServiceInterface {
     @Override
     public MediaDto playMedia(Long id) { //add authentication user later on
 
+        MediaDto playedMedia = fetchMediaById(id);
+
+        UserHistory userHistory = new UserHistory();
+        //userHistory.setUserSub();
+        userHistory.setMediaId(playedMedia.getMediaId());
+        userHistory.setPlayCount(userHistory.getPlayCount()+1);
+        userHistoryRepository.save(userHistory);
+
+        return playedMedia;
+    }
+
+    @Override
+    public MediaDto getMostPlayedMedia() { //add authentication user later on...
+
+        String userId = "test";
+
+        List<UserHistory> mostPlayedMediaList = userHistoryRepository.findUserHistoriesByUserId(userId);
+
+        UserHistory mostPlayed = mostPlayedMediaList.stream().max(Comparator.comparingLong(UserHistory::getPlayCount))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
+
+        MediaDto mostPlayedMedia = fetchMediaById(mostPlayed.getMediaId());
+
+        return mostPlayedMedia;
+    }
+
+    private MediaDto fetchMediaById(Long id) {
         ServiceInstance serviceInstance = loadBalancerClient.choose("media-handling");
         if (serviceInstance == null) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "The service is not available");
         }
 
-        MediaDto mediaDtoResponse = restClient.get()
+        MediaDto mediaDto = restClient.get()
                 .uri(serviceInstance.getUri() + "/api/v1/getmediabyid/" + id)
                 .retrieve()
                 .body(MediaDto.class);
-        if (mediaDtoResponse == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Something went wrong");
-        }
-        UserHistory userHistory = new UserHistory();
-        //userHistory.setUserSub();
-        userHistory.setPlayedMediaId(mediaDtoResponse.getMediaId());
-        userHistoryRepository.save(userHistory);
-        return mediaDtoResponse;
-    }
 
-    @Override
-    public MediaDto getMostPlayedMedia() { //add authentication user later on...
-        return null;
+        if (mediaDto == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Media not found with id: " + id);
+        }
+
+        return mediaDto;
     }
 }
