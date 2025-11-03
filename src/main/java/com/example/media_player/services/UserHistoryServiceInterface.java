@@ -1,7 +1,7 @@
 package com.example.media_player.services;
 
 import com.example.media_player.dtos.MediaDto;
-import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.Authentication;
 
 public interface UserHistoryServiceInterface {
 

@@ -8,7 +8,7 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,9 +30,9 @@ public class UserHistoryService implements UserHistoryServiceInterface {
     @Override
     public MediaDto playMedia(Long id) { //add authentication user later on
 
-        ServiceInstance serviceInstance = loadBalancerClient.choose("MediaHandlingService");
+        ServiceInstance serviceInstance = loadBalancerClient.choose("media-handling");
         if (serviceInstance == null) {
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "MediaHandlingService not available");
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "The service is not available");
         }
 
         MediaDto mediaDtoResponse = restClient.get()
