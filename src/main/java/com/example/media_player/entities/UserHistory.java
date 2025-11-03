@@ -16,11 +16,21 @@ public class UserHistory {
     @Column(length = 100, unique = true) //nullable= false?
     private String userSub;
 
+    public UserHistory() {}
+
     public void setUserId(Long userId) {
         this.userId = userId;
     }
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getUserSub() {
+        return userSub;
+    }
+
+    public void setUserSub(String userSub) {
+        this.userSub = userSub;
     }
 }

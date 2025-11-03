@@ -23,7 +23,7 @@ public class UserHistoryController {
     }
 
     @GetMapping("/mostplayed")
-    public ResponseEntity<MediaDto> getMostPlayedMedia() {
-        MediaDto media =
+    public ResponseEntity<MediaDto> getMostPlayedMedia() { //Add @Authenticationprincipal jwt jwt later on
+        return new ResponseEntity<>(media, HttpStatus.OK);
     }
 }
