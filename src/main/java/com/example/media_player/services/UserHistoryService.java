@@ -36,13 +36,16 @@ public class UserHistoryService implements UserHistoryServiceInterface {
         }
 
         MediaDto mediaDtoResponse = restClient.get()
-                .uri(serviceInstance.getUri() + "/media/getmediabyid")
+                .uri(serviceInstance.getUri() + "/media/getmediabyid/" + id)
                 .retrieve()
                 .body(MediaDto.class);
         if (mediaDtoResponse == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Something went wrong");
         }
-        userHistoryRepository.save(mediaDtoResponse);
+        UserHistory userHistory = new UserHistory();
+        //userHistory.setUserSub();
+        userHistory.setPlayedMediaId(mediaDtoResponse.getMediaId());
+        userHistoryRepository.save(userHistory);
         return mediaDtoResponse;
     }
 

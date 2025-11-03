@@ -10,21 +10,33 @@ public class UserHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long historyId;
 
     //stores the users jwt token sub
     @Column(length = 100, unique = true) //nullable= false?
     private String userSub;
 
+    @Column(nullable = false)
+    private Long playedMediaId;
+
+    public Long getHistoryId() {
+        return historyId;
+    }
+
+    public void setHistoryId(Long historyId) {
+        this.historyId = historyId;
+    }
+
+    public Long getPlayedMediaId() {
+        return playedMediaId;
+    }
+
+    public void setPlayedMediaId(Long playedMediaId) {
+        this.playedMediaId = playedMediaId;
+    }
+
     public UserHistory() {}
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
 
     public String getUserSub() {
         return userSub;
