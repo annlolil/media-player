@@ -30,21 +30,6 @@ public class UserHistoryService implements UserHistoryServiceInterface {
         this.loadBalancerClient = loadBalancerClient;
     }
 
-//    @Override
-//    public MediaDto playMedia(Long id) { //add authentication user later on
-//
-//        MediaDto playedMedia = fetchMediaById(id);
-//
-//        UserHistory userHistory = new UserHistory();
-//        userHistory.setUserId("TESTSUB"); //just for testing without keycloak
-//        userHistory.setMediaId(playedMedia.getMediaId());
-//        userHistory.setPlayCount(0L);
-//        userHistory.setPlayCount(userHistory.getPlayCount()+1);
-//        userHistoryRepository.save(userHistory);
-//
-//        return playedMedia;
-//    }
-
     @Override
     public MediaDto playMedia(Long id) {
         MediaDto playedMedia = fetchMediaById(id);
@@ -60,19 +45,17 @@ public class UserHistoryService implements UserHistoryServiceInterface {
                     return newHistory;
                 });
 
-        // increment safely
         userHistory.setPlayCount(userHistory.getPlayCount() + 1);
 
-        // save
         userHistoryRepository.save(userHistory);
 
         return playedMedia;
     }
 
     @Override
-    public MediaDto getMostPlayedMedia() { //add authentication user later on...
+    public MediaDto getMostPlayedMedia() { //add authentication user later on... Jwt jwt
 
-        String userId = "test";
+        String userId = "TESTSUB"; // The jwt-token sub should be stored here. String userId = jwt.getSubject()
 
         List<UserHistory> mostPlayedMediaList = userHistoryRepository.findUserHistoriesByUserId(userId);
 
