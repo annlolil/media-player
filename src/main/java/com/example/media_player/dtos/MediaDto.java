@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MediaDto {
 
-    @JsonProperty("media_id")
+    @JsonProperty("id")
     private Long mediaId;
     private String url;
 
