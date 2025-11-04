@@ -1,7 +1,10 @@
 package com.example.media_player.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class MediaDto {
 
+    @JsonProperty("media_id")
     private Long mediaId;
     private String url;
 

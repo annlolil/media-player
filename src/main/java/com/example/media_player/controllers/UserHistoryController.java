@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/mediaplayer")
 public class UserHistoryController {
 
     private final UserHistoryService userHistoryService;
@@ -21,8 +21,8 @@ public class UserHistoryController {
         return new ResponseEntity<>(userHistoryService.playMedia(id), HttpStatus.OK);
     }
 
-//    @GetMapping("/mostplayed")
-//    public ResponseEntity<MediaDto> getMostPlayedMedia() { //Add @Authenticationprincipal jwt jwt later on
-//        return new ResponseEntity<>(media, HttpStatus.OK);
-//    }
+    @GetMapping("/mostplayed")
+    public ResponseEntity<MediaDto> getMostPlayedMedia() { //Add @Authenticationprincipal jwt jwt later on
+        return new ResponseEntity<>(userHistoryService.getMostPlayedMedia(), HttpStatus.OK);
+    }
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "user_media_stats",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"userSub", "mediaId"})
+                @UniqueConstraint(columnNames = {"userId", "mediaId"})
         })
 public class UserHistory {
 
@@ -21,7 +21,7 @@ public class UserHistory {
     private Long mediaId;
 
     @Column(nullable = false)
-    private Long playCount;
+    private Long playCount = 0L;
 
     public UserHistory() {}
 

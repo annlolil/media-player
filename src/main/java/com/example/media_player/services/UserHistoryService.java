@@ -30,15 +30,40 @@ public class UserHistoryService implements UserHistoryServiceInterface {
         this.loadBalancerClient = loadBalancerClient;
     }
 
-    @Override
-    public MediaDto playMedia(Long id) { //add authentication user later on
+//    @Override
+//    public MediaDto playMedia(Long id) { //add authentication user later on
+//
+//        MediaDto playedMedia = fetchMediaById(id);
+//
+//        UserHistory userHistory = new UserHistory();
+//        userHistory.setUserId("TESTSUB"); //just for testing without keycloak
+//        userHistory.setMediaId(playedMedia.getMediaId());
+//        userHistory.setPlayCount(0L);
+//        userHistory.setPlayCount(userHistory.getPlayCount()+1);
+//        userHistoryRepository.save(userHistory);
+//
+//        return playedMedia;
+//    }
 
+    @Override
+    public MediaDto playMedia(Long id) {
         MediaDto playedMedia = fetchMediaById(id);
 
-        UserHistory userHistory = new UserHistory();
-        //userHistory.setUserSub();
-        userHistory.setMediaId(playedMedia.getMediaId());
-        userHistory.setPlayCount(userHistory.getPlayCount()+1);
+        // fetch existing history or create a new one
+        UserHistory userHistory = userHistoryRepository
+                .findByUserIdAndMediaId("TESTSUB", playedMedia.getMediaId())
+                .orElseGet(() -> {
+                    UserHistory newHistory = new UserHistory();
+                    newHistory.setUserId("TESTSUB");
+                    newHistory.setMediaId(playedMedia.getMediaId());
+                    newHistory.setPlayCount(0L); // initialize
+                    return newHistory;
+                });
+
+        // increment safely
+        userHistory.setPlayCount(userHistory.getPlayCount() + 1);
+
+        // save
         userHistoryRepository.save(userHistory);
 
         return playedMedia;
@@ -66,7 +91,7 @@ public class UserHistoryService implements UserHistoryServiceInterface {
         }
 
         MediaDto mediaDto = restClient.get()
-                .uri(serviceInstance.getUri() + "/api/v1/getmediabyid/" + id)
+                .uri(serviceInstance.getUri() + "/api/mediahandling/media/" + id)
                 .retrieve()
                 .body(MediaDto.class);
 
