@@ -7,6 +7,7 @@ public class MediaDto {
     @JsonProperty("id")
     private Long mediaId;
     private String url;
+    private String genre;
 
     public MediaDto() {}
 
@@ -24,5 +25,13 @@ public class MediaDto {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 }
