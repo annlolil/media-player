@@ -7,7 +7,7 @@ import jakarta.persistence.*;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"userId", "mediaId"})
         })
-public class UserHistory {
+public class UserHistory { // CHANGE THE NAME OF THE ENTITY?
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +22,12 @@ public class UserHistory {
 
     @Column(nullable = false)
     private Long playCount = 0L;
+
+    @Column
+    private boolean likedMedia = false;
+
+    @Column
+    private boolean dislikedMedia = false;
 
     public UserHistory() {}
 
@@ -55,5 +61,21 @@ public class UserHistory {
 
     public void setPlayCount(Long playCount) {
         this.playCount = playCount;
+    }
+
+    public boolean isLikedMedia() {
+        return likedMedia;
+    }
+
+    public void setLikedMedia(boolean likedMedia) {
+        this.likedMedia = likedMedia;
+    }
+
+    public boolean isDislikedMedia() {
+        return dislikedMedia;
+    }
+
+    public void setDislikedMedia(boolean dislikedMedia) {
+        this.dislikedMedia = dislikedMedia;
     }
 }
