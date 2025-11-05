@@ -7,7 +7,7 @@ import jakarta.persistence.*;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"userId", "mediaId"})
         })
-public class UserHistory { // CHANGE THE NAME OF THE ENTITY?
+public class UserMedia { // CHANGE THE NAME OF THE ENTITY?
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class UserHistory { // CHANGE THE NAME OF THE ENTITY?
     @Column
     private boolean dislikedMedia = false;
 
-    public UserHistory() {}
+    public UserMedia() {}
 
     public Long getId() {
         return id;
