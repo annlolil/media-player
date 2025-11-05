@@ -8,6 +8,7 @@ public class MediaDto {
     private Long mediaId;
     private String url;
     private String genre;
+    private String mediaName;
 
     public MediaDto() {}
 
@@ -33,5 +34,13 @@ public class MediaDto {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String getMediaName() {
+        return mediaName;
+    }
+
+    public void setMediaName(String mediaName) {
+        this.mediaName = mediaName;
     }
 }
