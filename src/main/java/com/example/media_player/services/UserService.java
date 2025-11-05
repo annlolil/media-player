@@ -71,7 +71,7 @@ public class UserService implements UserServiceInterface {
 
     // Can only like media that a user has listened to, fetching from media-player database.
     @Override
-    public UserMedia likeMedia() {  //add authentication user later on.... jwt jwt
+    public UserMedia likeMedia(Long id) {  //add authentication user later on.... jwt jwt
 
         String userId = "TESTSUB"; // for testing before keycloak
 
@@ -83,6 +83,22 @@ public class UserService implements UserServiceInterface {
         userRepository.save(likedMedia);
 
         return likedMedia;
+    }
+
+    // Can only dislike media that a user has listened to, fetching from media-player database.
+    @Override
+    public UserMedia dislikeMedia(Long id) { // add authentication user later on... jwt jwt
+
+        String userId = "TESTSUB"; // for testing before keycloak
+
+        UserMedia dislikedMedia = userRepository.findByUserIdAndMediaId(userId, id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
+
+        dislikedMedia.setDislikedMedia(true);
+
+        userRepository.save(dislikedMedia);
+
+        return dislikedMedia;
     }
 
     // Fetches a media by id from microservice media-handling

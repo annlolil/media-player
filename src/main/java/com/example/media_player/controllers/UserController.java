@@ -26,6 +26,11 @@ public class UserController {
 
     @PutMapping("/like")
     public ResponseEntity<UserMedia> likeMedia(@RequestParam Long id) { // Add @AuthenticationPrincipal Jwt jwt later on...
-        return new ResponseEntity<>(userService.likeMedia(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.likeMedia(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/dislike")
+    public ResponseEntity<UserMedia> dislikeMedia(@RequestParam Long id) {// Add//
+        return new ResponseEntity<>(userService.dislikeMedia(id), HttpStatus.OK);
     }
 }
