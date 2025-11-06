@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping("/play")
-    public ResponseEntity<MediaDto> playMedia(@RequestParam Long id) { //Add @authenticationprincipal jwt jwt later on...
+    public ResponseEntity<MediaDto> playMedia(@RequestParam Long id) { //Add @AuthenticationPrincipal Jwt jwt later on...
         return new ResponseEntity<>(userService.playMedia(id), HttpStatus.OK);
     }
 
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PutMapping("/dislike")
-    public ResponseEntity<UserMedia> dislikeMedia(@RequestParam Long id) {// Add//
+    public ResponseEntity<UserMedia> dislikeMedia(@RequestParam Long id) {// Add @AuthenticationPrincipal Jwt jwt later on...
         return new ResponseEntity<>(userService.dislikeMedia(id), HttpStatus.OK);
     }
 }

@@ -34,17 +34,18 @@ public class UserService implements UserServiceInterface {
 
         String userId = "TESTSUB";
 
+        // Fetching media to play from media-handling service
         MediaDto playedMedia = fetchMediaById(id);
 
         // fetch existing history or create a new one
         UserMedia userMedia = userRepository
                 .findByUserIdAndMediaId(userId, playedMedia.getMediaId())
                 .orElseGet(() -> {
-                    UserMedia newHistory = new UserMedia();
-                    newHistory.setUserId(userId);
-                    newHistory.setMediaId(playedMedia.getMediaId());
-                    newHistory.setPlayCount(0L);
-                    return newHistory;
+                    UserMedia newUserMedia = new UserMedia();
+                    newUserMedia.setUserId(userId);
+                    newUserMedia.setMediaId(playedMedia.getMediaId());
+                    newUserMedia.setPlayCount(0L);
+                    return newUserMedia;
                 });
 
         userMedia.setPlayCount(userMedia.getPlayCount() + 1);
@@ -59,10 +60,13 @@ public class UserService implements UserServiceInterface {
 
         String userId = "TESTSUB"; // The jwt-token sub should be stored here. String userId = jwt.getSubject()
 
-        List<UserMedia> mostPlayedMediaList = userRepository.findUserHistoriesByUserId(userId);
+//        List<UserMedia> mostPlayedMediaList = userRepository.findUserHistoriesByUserId(userId);
 
-        UserMedia mostPlayed = mostPlayedMediaList.stream().max(Comparator.comparingLong(UserMedia::getPlayCount))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
+        UserMedia mostPlayed = userRepository.findTopByUserIdOrderByPlayCountDesc(userId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
+
+//                mostPlayedMediaList.stream().max(Comparator.comparingLong(UserMedia::getPlayCount))
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
 
         MediaDto mostPlayedMedia = fetchMediaById(mostPlayed.getMediaId());
 
@@ -79,6 +83,7 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
 
         likedMedia.setLikedMedia(true);
+        likedMedia.setDislikedMedia(false);
 
         userRepository.save(likedMedia);
 
@@ -95,6 +100,7 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
 
         dislikedMedia.setDislikedMedia(true);
+        dislikedMedia.setLikedMedia(false);
 
         userRepository.save(dislikedMedia);
 
