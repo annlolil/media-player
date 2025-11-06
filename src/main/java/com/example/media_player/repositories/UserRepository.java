@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<UserMedia, Long> {
     List<UserMedia> findByUserIdAndLikedMediaTrue(String userId);
 
     List<UserMedia> findByUserIdAndDislikedMediaTrue(String userId);
+
+    List<UserMedia> findUserMediaByUserId(String userId);
 }

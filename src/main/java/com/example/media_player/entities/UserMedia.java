@@ -21,6 +21,12 @@ public class UserMedia { // CHANGE THE NAME OF THE ENTITY?
     private Long mediaId;
 
     @Column(nullable = false)
+    private String mediaName;
+
+    @Column
+    private String genre; //???
+
+    @Column(nullable = false)
     private Long playCount = 0L;
 
     @Column
@@ -39,6 +45,14 @@ public class UserMedia { // CHANGE THE NAME OF THE ENTITY?
         this.id = id;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public Long getMediaId() {
         return mediaId;
     }
@@ -47,12 +61,20 @@ public class UserMedia { // CHANGE THE NAME OF THE ENTITY?
         this.mediaId = mediaId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getMediaName() {
+        return mediaName;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setMediaName(String mediaName) {
+        this.mediaName = mediaName;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public Long getPlayCount() {

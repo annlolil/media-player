@@ -2,12 +2,15 @@ package com.example.media_player.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class MediaDto {
 
     @JsonProperty("id")
     private Long mediaId;
     private String url;
-    private String genre;
+    private List<String> genres;
+    @JsonProperty("name")
     private String mediaName;
 
     public MediaDto() {}
@@ -28,12 +31,12 @@ public class MediaDto {
         this.url = url;
     }
 
-    public String getGenre() {
-        return genre;
+    public List<String> getGenres() {
+        return genres;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
     }
 
     public String getMediaName() {

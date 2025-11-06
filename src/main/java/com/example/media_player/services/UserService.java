@@ -3,6 +3,7 @@ package com.example.media_player.services;
 import com.example.media_player.dtos.MediaDto;
 import com.example.media_player.entities.UserMedia;
 import com.example.media_player.repositories.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
@@ -44,6 +45,8 @@ public class UserService implements UserServiceInterface {
                     UserMedia newUserMedia = new UserMedia();
                     newUserMedia.setUserId(userId);
                     newUserMedia.setMediaId(playedMedia.getMediaId());
+                    newUserMedia.setMediaName(playedMedia.getMediaName());
+//                    newUserMedia.setGenre(playedMedia.getGenres()); // Choose one genre or add a new entity representing genre?
                     newUserMedia.setPlayCount(0L);
                     return newUserMedia;
                 });
@@ -56,55 +59,69 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public MediaDto getMostPlayedMedia() { //add authentication user later on... Jwt jwt
+    public List<UserMedia> getAllPlayedMedia() { // add authentication user later on
+
+        String userId = "TESTSUB";
+
+        List<UserMedia> allPlayedMedia = userRepository.findUserMediaByUserId(userId);
+
+        return allPlayedMedia;
+    }
+
+    @Override
+    public List<UserMedia> getMostPlayedMedia() { //add authentication user later on... Jwt jwt
 
         String userId = "TESTSUB"; // The jwt-token sub should be stored here. String userId = jwt.getSubject()
 
-//        List<UserMedia> mostPlayedMediaList = userRepository.findUserHistoriesByUserId(userId);
+        List<UserMedia> allPlayed = userRepository.findUserMediaByUserId(userId);
 
-        UserMedia mostPlayed = userRepository.findTopByUserIdOrderByPlayCountDesc(userId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
+        long maxCount = allPlayed.stream().map(UserMedia::getPlayCount).max(Long::compareTo).orElse(0L);
 
-//                mostPlayedMediaList.stream().max(Comparator.comparingLong(UserMedia::getPlayCount))
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
+        List<UserMedia> mostPlayed = allPlayed.stream().filter(userMedia -> userMedia.getPlayCount() == maxCount).toList();
 
-        MediaDto mostPlayedMedia = fetchMediaById(mostPlayed.getMediaId());
+//        UserMedia mostPlayed = userRepository.findTopByUserIdOrderByPlayCountDesc(userId)
+//                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
 
-        return mostPlayedMedia;
+//        MediaDto mostPlayedMedia = fetchMediaById(mostPlayed.getMediaId());
+
+        return mostPlayed;
     }
 
-    // Can only like media that a user has listened to, fetching from media-player database.
+    // Can only like/dislike media that a user has listened to, fetching from media-player database.
     @Override
-    public UserMedia likeMedia(Long id) {  //add authentication user later on.... jwt jwt
+    public UserMedia likeDislikeMedia(Long id, String likeDislike) {  //add authentication user later on.... jwt jwt
 
         String userId = "TESTSUB"; // for testing before keycloak
 
-        UserMedia likedMedia = userRepository.findByUserIdAndMediaId(userId, id)
+        UserMedia mediaToLikeOrDislike = userRepository.findByUserIdAndMediaId(userId, id)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
 
-        likedMedia.setLikedMedia(true);
-        likedMedia.setDislikedMedia(false);
+        if(likeDislike.equals("like")) {
+            mediaToLikeOrDislike.setLikedMedia(true);
+            mediaToLikeOrDislike.setDislikedMedia(false);
+        }
+        else if(likeDislike.equals("dislike")) {
+            mediaToLikeOrDislike.setLikedMedia(false);
+            mediaToLikeOrDislike.setDislikedMedia(true);
+        }
 
-        userRepository.save(likedMedia);
+        userRepository.save(mediaToLikeOrDislike);
 
-        return likedMedia;
+        return mediaToLikeOrDislike;
     }
 
-    // Can only dislike media that a user has listened to, fetching from media-player database.
+    // Get a list of media that a user has liked/disliked
     @Override
-    public UserMedia dislikeMedia(Long id) { // add authentication user later on... jwt jwt
+    public List<UserMedia> getUserMediaByReaction(boolean likedMedia) { // add authentication later on...
 
-        String userId = "TESTSUB"; // for testing before keycloak
+        String userId = "TESTSUB";
 
-        UserMedia dislikedMedia = userRepository.findByUserIdAndMediaId(userId, id)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
-
-        dislikedMedia.setDislikedMedia(true);
-        dislikedMedia.setLikedMedia(false);
-
-        userRepository.save(dislikedMedia);
-
-        return dislikedMedia;
+        if(likedMedia) {
+            return userRepository.findByUserIdAndLikedMediaTrue(userId);
+        }
+        else {
+            return userRepository.findByUserIdAndDislikedMediaTrue(userId);
+        }
     }
 
     // Fetches a media by id from microservice media-handling
