@@ -38,7 +38,7 @@ public class UserService implements UserServiceInterface {
         // Fetching media to play from media-handling service
         MediaDto playedMedia = fetchMediaById(id);
 
-        // fetch existing history or create a new one
+        // Fetch existing history or create a new one
         UserMedia userMedia = userRepository
                 .findByUserIdAndMediaId(userId, playedMedia.getMediaId())
                 .orElseGet(() -> {
@@ -46,7 +46,7 @@ public class UserService implements UserServiceInterface {
                     newUserMedia.setUserId(userId);
                     newUserMedia.setMediaId(playedMedia.getMediaId());
                     newUserMedia.setMediaName(playedMedia.getMediaName());
-//                    newUserMedia.setGenre(playedMedia.getGenres()); // Choose one genre or add a new entity representing genre?
+//                    newUserMedia.setGenre(playedMedia.getGenres()); // Add a new entity representing genre?
                     newUserMedia.setPlayCount(0L);
                     return newUserMedia;
                 });
@@ -79,10 +79,6 @@ public class UserService implements UserServiceInterface {
 
         List<UserMedia> mostPlayed = allPlayed.stream().filter(userMedia -> userMedia.getPlayCount() == maxCount).toList();
 
-//        UserMedia mostPlayed = userRepository.findTopByUserIdOrderByPlayCountDesc(userId)
-//                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
-
-//        MediaDto mostPlayedMedia = fetchMediaById(mostPlayed.getMediaId());
 
         return mostPlayed;
     }
@@ -126,6 +122,7 @@ public class UserService implements UserServiceInterface {
 
     // Fetches a media by id from microservice media-handling
     private MediaDto fetchMediaById(Long id) {
+
         ServiceInstance serviceInstance = loadBalancerClient.choose("media-handling");
         if (serviceInstance == null) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "The service is not available");
