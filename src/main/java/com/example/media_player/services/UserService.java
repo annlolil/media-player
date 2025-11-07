@@ -132,7 +132,7 @@ public class UserService implements UserServiceInterface {
         }
 
         MediaDto mediaDto = restClient.get()
-                .uri(serviceInstance.getUri() + "/api/mediahandling/media/" + id)
+                .uri(serviceInstance.getUri() + "/api/v1/mediahandling/media/" + id)
                 .retrieve()
                 .body(MediaDto.class);
 

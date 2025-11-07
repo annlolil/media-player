@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mediaplayer")
+@RequestMapping("/api/v1/mediaplayer")
 public class UserController {
 
     private final UserService userService;
