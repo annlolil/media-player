@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class MediaDto {
-
+//DO WE NEED MEDIANAME AND GENRES HERE? SHOULD MAYBE JUST BE URL.. LIKE IT WAS BEFORE.
     @JsonProperty("id")
     private Long mediaId;
     private String url;

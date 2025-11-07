@@ -21,13 +21,7 @@ public class UserMedia {
     private Long mediaId;
 
     @Column(nullable = false)
-    private String mediaName;
-
-    @Column
-    private String genre; //???
-
-    @Column(nullable = false)
-    private Long playCount = 0L;
+    private Long playCount;
 
     @Column
     private boolean likedMedia = false;
@@ -59,22 +53,6 @@ public class UserMedia {
 
     public void setMediaId(Long mediaId) {
         this.mediaId = mediaId;
-    }
-
-    public String getMediaName() {
-        return mediaName;
-    }
-
-    public void setMediaName(String mediaName) {
-        this.mediaName = mediaName;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
     }
 
     public Long getPlayCount() {
