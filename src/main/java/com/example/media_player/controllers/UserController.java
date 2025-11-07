@@ -3,16 +3,13 @@ package com.example.media_player.controllers;
 import com.example.media_player.dtos.MediaDto;
 import com.example.media_player.entities.UserMedia;
 import com.example.media_player.services.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/mediaplayer")
+@RequestMapping("/api/v1/mediaplayer")
 public class UserController {
 
     private final UserService userService;

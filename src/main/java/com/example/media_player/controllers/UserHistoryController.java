@@ -1,6 +1,5 @@
 package com.example.media_player.controllers;
 
-import com.example.media_player.dtos.MediaDto;
 import com.example.media_player.entities.UserMedia;
 import com.example.media_player.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mediaplayer")
+@RequestMapping("/api/v1/mediaplayer")
 public class UserHistoryController {
 
     private final UserService userService;
@@ -33,11 +32,11 @@ public class UserHistoryController {
 
     @GetMapping("/liked")
     public ResponseEntity<List<UserMedia>> getLikedMedia() { //Add @AuthenticationPrincipal Jwt jwt later on...
-        return new ResponseEntity<>(userService.getUserMediaByReaction(true), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getPlayedMediaByReaction(true), HttpStatus.OK);
     }
 
     @GetMapping("/disliked")
     public ResponseEntity<List<UserMedia>> getDislikedMedia() { //Add @AuthenticationPrincipal Jwt jwt later on...
-        return new ResponseEntity<>(userService.getUserMediaByReaction(false), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getPlayedMediaByReaction(false), HttpStatus.OK);
     }
 }
