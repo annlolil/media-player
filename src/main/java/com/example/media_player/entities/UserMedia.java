@@ -7,13 +7,13 @@ import jakarta.persistence.*;
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"userId", "mediaId"})
         })
-public class UserMedia { // CHANGE THE NAME OF THE ENTITY?
+public class UserMedia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //stores the users jwt token sub
+    // Stores the users jwt token sub
     @Column(length = 100, nullable = false)
     private String userId;
 

@@ -10,10 +10,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserMedia, Long> {
 
-//    List<UserMedia> findUserHistoriesByUserId(String userId);
-
-    Optional<UserMedia> findTopByUserIdOrderByPlayCountDesc(String userId);
-
     Optional<UserMedia> findByUserIdAndMediaId(String userId, Long mediaId);
 
     List<UserMedia> findByUserIdAndLikedMediaTrue(String userId);

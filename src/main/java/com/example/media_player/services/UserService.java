@@ -112,7 +112,7 @@ public class UserService implements UserServiceInterface {
 
     // Get a list of media that a user has liked/disliked
     @Override
-    public List<UserMedia> getUserMediaByReaction(boolean likedMedia) { // add authentication later on...
+    public List<UserMedia> getPlayedMediaByReaction(boolean likedMedia) { // add authentication later on...
 
         String userId = "TESTSUB";
 
