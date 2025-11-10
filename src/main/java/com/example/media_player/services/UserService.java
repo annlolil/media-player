@@ -10,6 +10,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 //import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
@@ -79,7 +80,6 @@ public class UserService implements UserServiceInterface {
 
         List<UserMedia> mostPlayed = allPlayed.stream().filter(userMedia -> userMedia.getPlayCount() == maxCount).toList();
 
-
         return mostPlayed;
     }
 
@@ -135,7 +135,7 @@ public class UserService implements UserServiceInterface {
                     .body(MediaDto.class);
         }
         catch (RestClientResponseException e) {
-            if(e.getStatusCode().value() == 500) {
+            if(e.getStatusCode().value() == 404) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Media not found");
             } else {
                 throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode().value()),
