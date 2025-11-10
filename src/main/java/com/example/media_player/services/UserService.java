@@ -10,7 +10,10 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 //import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Comparator;
@@ -45,8 +48,6 @@ public class UserService implements UserServiceInterface {
                     UserMedia newUserMedia = new UserMedia();
                     newUserMedia.setUserId(userId);
                     newUserMedia.setMediaId(playedMedia.getMediaId());
-                    newUserMedia.setMediaName(playedMedia.getMediaName());
-//                    newUserMedia.setGenre(playedMedia.getGenres()); // Add a new entity representing genre?
                     newUserMedia.setPlayCount(0L);
                     return newUserMedia;
                 });
@@ -78,7 +79,6 @@ public class UserService implements UserServiceInterface {
         long maxCount = allPlayed.stream().map(UserMedia::getPlayCount).max(Long::compareTo).orElse(0L);
 
         List<UserMedia> mostPlayed = allPlayed.stream().filter(userMedia -> userMedia.getPlayCount() == maxCount).toList();
-
 
         return mostPlayed;
     }
@@ -128,15 +128,19 @@ public class UserService implements UserServiceInterface {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "The service is not available");
         }
 
-        MediaDto mediaDto = restClient.get()
-                .uri(serviceInstance.getUri() + "/api/v1/mediahandling/media/" + id)
-                .retrieve()
-                .body(MediaDto.class);
-
-        if (mediaDto == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Media not found with id: " + id);
+        try {
+            return restClient.get()
+                    .uri(serviceInstance.getUri() + "/api/v1/mediahandling/media/" + id)
+                    .retrieve()
+                    .body(MediaDto.class);
         }
-
-        return mediaDto;
+        catch (RestClientResponseException e) {
+            if(e.getStatusCode().value() == 404) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Media not found");
+            } else {
+                throw new ResponseStatusException(HttpStatus.valueOf(e.getStatusCode().value()),
+                        "Something went wrong when fetching media: " + e.getResponseBodyAsString());
+            }
+        }
     }
 }
