@@ -25,6 +25,7 @@ public class UserHistoryController {
         return new ResponseEntity<>(userService.getMostPlayedMedia(), HttpStatus.OK);
     }
 
+    // Used by recommendations service
     @GetMapping("/allplayed")
     public ResponseEntity<List<UserMedia>> getAllPlayedMedia() {
         return new ResponseEntity<>(userService.getAllPlayedMedia(), HttpStatus.OK);

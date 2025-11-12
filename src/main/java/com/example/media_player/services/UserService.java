@@ -83,6 +83,7 @@ public class UserService implements UserServiceInterface {
         return mostPlayed;
     }
 
+
     // Can only like/dislike media that a user has listened to, fetching from media-player database.
     @Override
     public UserMedia likeDislikeMedia(Long id, String likeDislike) {  //add authentication user later on.... jwt jwt
@@ -119,6 +120,18 @@ public class UserService implements UserServiceInterface {
             return userRepository.findByUserIdAndDislikedMediaTrue(userId);
         }
     }
+
+
+    // Used to send data to recommendations service
+//    public List<UserMedia> get10MostPlayedMedia() {
+//        String userId = "TESTSUB"; // Replace with jwt.getSubject() later
+//        List<UserMedia> allPlayed = userRepository.findUserMediaByUserId(userId);
+//
+//        return allPlayed.stream()
+//                .sorted(Comparator.comparingLong(UserMedia::getPlayCount).reversed())
+//                .limit(10)
+//                .toList();
+//    }
 
     // Fetches a media by id from microservice media-handling
     private MediaDto fetchMediaById(Long id) {
