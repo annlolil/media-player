@@ -9,6 +9,7 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 //import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
@@ -120,18 +121,6 @@ public class UserService implements UserServiceInterface {
             return userRepository.findByUserIdAndDislikedMediaTrue(userId);
         }
     }
-
-
-    // Used to send data to recommendations service
-//    public List<UserMedia> get10MostPlayedMedia() {
-//        String userId = "TESTSUB"; // Replace with jwt.getSubject() later
-//        List<UserMedia> allPlayed = userRepository.findUserMediaByUserId(userId);
-//
-//        return allPlayed.stream()
-//                .sorted(Comparator.comparingLong(UserMedia::getPlayCount).reversed())
-//                .limit(10)
-//                .toList();
-//    }
 
     // Fetches a media by id from microservice media-handling
     private MediaDto fetchMediaById(Long id) {
