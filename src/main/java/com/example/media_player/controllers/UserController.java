@@ -23,17 +23,17 @@ public class UserController {
     }
 
     @PostMapping("/play")
-    public ResponseEntity<MediaDto> playMedia(@RequestParam Long id) { //Add @AuthenticationPrincipal Jwt jwt later on...
-        return new ResponseEntity<>(userService.playMedia(id), HttpStatus.OK);
+    public ResponseEntity<MediaDto> playMedia(@RequestParam Long id, @AuthenticationPrincipal Jwt jwt) {
+        return new ResponseEntity<>(userService.playMedia(id, jwt), HttpStatus.OK);
     }
 
     @PutMapping("/like")
-    public ResponseEntity<UserMedia> likeMedia(@RequestParam Long id) { // Add @AuthenticationPrincipal Jwt jwt later on...
-        return new ResponseEntity<>(userService.likeDislikeMedia(id, "like"), HttpStatus.OK);
+    public ResponseEntity<UserMedia> likeMedia(@RequestParam Long id, @AuthenticationPrincipal Jwt jwt) {
+        return new ResponseEntity<>(userService.likeDislikeMedia(id, "like", jwt), HttpStatus.OK);
     }
 
     @PutMapping("/dislike")
-    public ResponseEntity<UserMedia> dislikeMedia(@RequestParam Long id) {// Add @AuthenticationPrincipal Jwt jwt later on...
-        return new ResponseEntity<>(userService.likeDislikeMedia(id, "dislike"), HttpStatus.OK);
+    public ResponseEntity<UserMedia> dislikeMedia(@RequestParam Long id, @AuthenticationPrincipal Jwt jwt) {
+        return new ResponseEntity<>(userService.likeDislikeMedia(id, "dislike", jwt), HttpStatus.OK);
     }
 }

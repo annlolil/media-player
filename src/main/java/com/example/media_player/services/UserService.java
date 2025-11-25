@@ -35,9 +35,9 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public MediaDto playMedia(Long id) { // add jwt later on
+    public MediaDto playMedia(Long id, Jwt jwt) {
 
-        String userId = "TESTSUB";
+        String userId = jwt.getSubject();
 
         // Fetching media to play from media-handling service
         MediaDto playedMedia = fetchMediaById(id);
@@ -61,19 +61,17 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public List<UserMedia> getAllPlayedMedia() { // add authentication user later on
+    public List<UserMedia> getAllPlayedMedia(Jwt jwt) {
 
-        String userId = "TESTSUB";
+        String userId = jwt.getSubject();
 
-        List<UserMedia> allPlayedMedia = userRepository.findUserMediaByUserId(userId);
-
-        return allPlayedMedia;
+        return userRepository.findUserMediaByUserId(userId);
     }
 
     @Override
-    public List<UserMedia> getMostPlayedMedia() { //add authentication user later on... Jwt jwt
+    public List<UserMedia> getMostPlayedMedia(Jwt jwt) {
 
-        String userId = "TESTSUB"; // The jwt-token sub should be stored here. String userId = jwt.getSubject()
+        String userId = jwt.getSubject();
 
         List<UserMedia> allPlayed = userRepository.findUserMediaByUserId(userId);
 
@@ -87,9 +85,9 @@ public class UserService implements UserServiceInterface {
 
     // Can only like/dislike media that a user has listened to, fetching from media-player database.
     @Override
-    public UserMedia likeDislikeMedia(Long id, String likeDislike) {  //add authentication user later on.... jwt jwt
+    public UserMedia likeDislikeMedia(Long id, String likeDislike, Jwt jwt) {
 
-        String userId = "TESTSUB"; // for testing before keycloak
+        String userId = jwt.getSubject();
 
         UserMedia mediaToLikeOrDislike = userRepository.findByUserIdAndMediaId(userId, id)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No media played yet"));
@@ -110,9 +108,9 @@ public class UserService implements UserServiceInterface {
 
     // Get a list of media that a user has liked/disliked
     @Override
-    public List<UserMedia> getPlayedMediaByReaction(boolean likedMedia) { // add authentication later on...
+    public List<UserMedia> getPlayedMediaByReaction(boolean likedMedia, Jwt jwt) {
 
-        String userId = "TESTSUB";
+        String userId = jwt.getSubject();
 
         if(likedMedia) {
             return userRepository.findByUserIdAndLikedMediaTrue(userId);
