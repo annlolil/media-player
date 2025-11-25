@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface UserServiceInterface {
 
-    MediaDto playMedia(Long id); //add authentication user later on...
+    MediaDto playMedia(Long id, Jwt jwt);
 
-    List<UserMedia> getAllPlayedMedia(); //add authentication user later on...
+    List<UserMedia> getAllPlayedMedia(Jwt jwt);
 
-    List<UserMedia> getMostPlayedMedia(); //Add authentication user later on...
+    List<UserMedia> getMostPlayedMedia(Jwt jwt);
 
-    UserMedia likeDislikeMedia(Long id, String likeDislike); // Add authentication user later on....
+    UserMedia likeDislikeMedia(Long id, String likeDislike, Jwt jwt);
 
-    List<UserMedia> getPlayedMediaByReaction(boolean reaction); // Add user later on....
+    List<UserMedia> getPlayedMediaByReaction(boolean reaction, Jwt jwt);
 }
