@@ -124,7 +124,7 @@ public class UserService implements UserServiceInterface {
     // Fetches a media by id from microservice media-handling
     private MediaDto fetchMediaById(Long id, Jwt jwt) {
 
-        String token = jwt.getTokenValue(); //testing
+        String token = jwt.getTokenValue();
 
         ServiceInstance serviceInstance = loadBalancerClient.choose("media-handling");
         if (serviceInstance == null) {
