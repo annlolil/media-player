@@ -7,6 +7,7 @@ import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 //import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -40,7 +41,7 @@ public class UserService implements UserServiceInterface {
         String userId = jwt.getSubject();
 
         // Fetching media to play from media-handling service
-        MediaDto playedMedia = fetchMediaById(id);
+        MediaDto playedMedia = fetchMediaById(id, jwt);
 
         // Fetch existing history or create a new one
         UserMedia userMedia = userRepository
@@ -121,7 +122,9 @@ public class UserService implements UserServiceInterface {
     }
 
     // Fetches a media by id from microservice media-handling
-    private MediaDto fetchMediaById(Long id) {
+    private MediaDto fetchMediaById(Long id, Jwt jwt) {
+
+        String token = jwt.getTokenValue();
 
         ServiceInstance serviceInstance = loadBalancerClient.choose("media-handling");
         if (serviceInstance == null) {
@@ -131,6 +134,7 @@ public class UserService implements UserServiceInterface {
         try {
             return restClient.get()
                     .uri(serviceInstance.getUri() + "/api/v1/mediahandling/media/" + id)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token) //testing
                     .retrieve()
                     .body(MediaDto.class);
         }
