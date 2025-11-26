@@ -41,7 +41,7 @@ public class UserService implements UserServiceInterface {
         String userId = jwt.getSubject();
 
         // Fetching media to play from media-handling service
-        MediaDto playedMedia = fetchMediaById(id, jwt); //TESTING
+        MediaDto playedMedia = fetchMediaById(id, jwt);
 
         // Fetch existing history or create a new one
         UserMedia userMedia = userRepository
