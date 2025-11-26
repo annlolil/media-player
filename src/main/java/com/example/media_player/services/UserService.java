@@ -134,7 +134,7 @@ public class UserService implements UserServiceInterface {
         try {
             return restClient.get()
                     .uri(serviceInstance.getUri() + "/api/v1/mediahandling/media/" + id)
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token) //testing
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .retrieve()
                     .body(MediaDto.class);
         }
