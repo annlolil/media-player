@@ -10,7 +10,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @Profile("dev")
 @EnableMethodSecurity
-public class SecurityConfig {
+public class DevSecurityConfig {
 
     @Bean
     public SecurityFilterChain devSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -20,9 +20,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()                  // all other requests need a token
                 )
                 .csrf(csrf -> csrf.disable())                     // needed for H2 console
-                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // allow frames for H2
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())) 
                 .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt -> {}) // enables JWT decoding without using the deprecated method
+                        oauth2.jwt(jwt -> {}) // enables JWT decoding
                 );
 
         return http.build();
